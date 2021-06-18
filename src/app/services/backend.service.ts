@@ -32,6 +32,18 @@ export class BackendService {
       );
   }
 
+  getPokemonPage(limit=20, offset=0):Observable<PaginatedPokemon>{
+    return this.httpClient
+    .get<PaginatedPokemon>(this.baseUrl,{limit,offset})
+    .pipe(
+      delay(1500),
+      map((paginatedPokemon: PaginatedPokemon) => {
+        
+      })
+    )
+
+  }
+
   getPokemonDetail(id: string): Observable<SimplifiedPokemon> {
     return this.httpClient
       .get<PokemonDetail>(`${this.baseUrl}/${id}`)
