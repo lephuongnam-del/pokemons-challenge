@@ -29,7 +29,7 @@ const routes: Routes = [
         path: 'pokemonpage',
         canLoad: [AuthenticatedGuard],
         loadChildren: () =>
-          import('./pokemonPage./pokemonPageComponent.module').then(
+          import('./pokemonPage/pokemonPage.module').then(
             x => x.pokemonPageModule
           )
       }
