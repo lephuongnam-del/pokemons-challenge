@@ -1,9 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil, tap,map } from 'rxjs/operators';
 import { Store } from '../abtract/store';
 import { PaginatorState } from '../components/paginator/paginator.component';
 import {
+PaginatedPokemon,
   PaginatedPokemonPage,
   SimplifiedPokemon,
   Stat
@@ -17,14 +18,7 @@ export class pokemonState {
   image: string = ' ';
   stats: Stat[] = [];
   type: string = ' ';
-  simplifiedPokemon: SimplifiedPokemon = {
-    name: '',
-    ability: '',
-    hiddenAbility: '',
-    image: '',
-    stats: [],
-    type: ''
-  };
+
   paginatorState: PaginatorState = {
     page: 1,
     pageCount: 5,
@@ -46,5 +40,17 @@ export class PokemonPageService extends Store<pokemonState>
     this.onDestroy$.complete();
   }
 
- 
+  // getpokemonPage() {
+  //   console.log('aaaaaaaaaaaaaaaaaaaaaaa');
+  //   this.backendService
+  //   .getPokemonsPage()
+  //   .pipe(
+  //      map((P:PaginatedPokemon) => P.results[0]?.id ),
+  //     takeUntil(this.onDestroy$)
+  //   ).subscribe((P:PaginatedPokemon) => {
+
+  //   }
+
+  //   )
+  // }
 }

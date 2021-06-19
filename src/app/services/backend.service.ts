@@ -34,16 +34,15 @@ export class BackendService {
       );
   }
 
-  getPokemonsPage(): Observable<PaginatedPokemon>{
+  getPokemonsPage(): Observable<any>{
     return this.httpClient
-      .get<PaginatedPokemon>(this.baseUrl)
+      .get<any>(this.baseUrl)
       .pipe(
         delay(1500),
         map((paginatedPokemon: PaginatedPokemon) => {
           return {
             ...paginatedPokemon,
             results: paginatedPokemon.results.map(pokemon => ({
-
               id: pokemon.url
                 .split('/')
                 .filter(Boolean)
@@ -58,16 +57,7 @@ export class BackendService {
 
   }
 
- private static getSimplified(pokemon: SimplifiedPokemon ): SimplifiedPokemon {
-    return {
-      name: pokemon?.name || '',
-      ability: pokemon?.ability,
-      hiddenAbility: pokemon?.hiddenAbility,
-      image: pokemon?.image,
-      stats: pokemon?.stats || [],
-      type: pokemon?.type,
-    }
-  }
+
   getPokemonDetail(id: string): Observable<SimplifiedPokemon> {
     return this.httpClient
       .get<PokemonDetail>(`${this.baseUrl}/${id}`)
