@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
-import { PaginatedPokemon, PokemonDetail, SimplifiedPokemon } from '../models/pokemon';
+import { delay, map,tap } from 'rxjs/operators';
+import { PaginatedPokemon, PaginatedPokemonPage, PokemonDetail, SimplifiedPokemon } from '../models/pokemon';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService {
   private readonly baseUrl = 'https://pokeapi.co/api/v2/pokemon';
 
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {
+
+  }
 
   getPokemons(limit = 20, offset = 0): Observable<PaginatedPokemon> {
     return this.httpClient
@@ -32,18 +34,40 @@ export class BackendService {
       );
   }
 
-  getPokemonPage(limit=20, offset=0):Observable<PaginatedPokemon>{
+  getPokemonsPage(): Observable<PaginatedPokemon>{
     return this.httpClient
-    .get<PaginatedPokemon>(this.baseUrl,{limit,offset})
-    .pipe(
-      delay(1500),
-      map((paginatedPokemon: PaginatedPokemon) => {
-        
-      })
-    )
+      .get<PaginatedPokemon>(this.baseUrl)
+      .pipe(
+        delay(1500),
+        map((paginatedPokemon: PaginatedPokemon) => {
+          return {
+            ...paginatedPokemon,
+            results: paginatedPokemon.results.map(pokemon => ({
+
+              id: pokemon.url
+                .split('/')
+                .filter(Boolean)
+                .pop()
+            })
+            
+            
+            )           
+          };
+        })
+      );
 
   }
 
+ private static getSimplified(pokemon: SimplifiedPokemon ): SimplifiedPokemon {
+    return {
+      name: pokemon?.name || '',
+      ability: pokemon?.ability,
+      hiddenAbility: pokemon?.hiddenAbility,
+      image: pokemon?.image,
+      stats: pokemon?.stats || [],
+      type: pokemon?.type,
+    }
+  }
   getPokemonDetail(id: string): Observable<SimplifiedPokemon> {
     return this.httpClient
       .get<PokemonDetail>(`${this.baseUrl}/${id}`)

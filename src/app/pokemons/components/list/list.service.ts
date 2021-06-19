@@ -3,7 +3,7 @@ import { BackendService } from '../../../services/backend.service';
 import { PaginatedPokemon, Pokemon } from '../../../models/pokemon';
 import { Store } from '../../../abtract/store';
 import { PaginatorState } from '../../../components/paginator/paginator.component';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { POKEMON_PAGING } from '../../../constants/key';
 export class PokemonsState {
@@ -27,6 +27,12 @@ export class ListService extends Store<PokemonsState> {
   constructor(private readonly backendService: BackendService) {
     super(new PokemonsState());
     this.initPokemons();
+    this.backendService
+      .getPokemonsPage()
+      .pipe(
+        
+        takeUntil(this.onDestroy$))
+      .subscribe( x =>console.log('aaaaaaaaaaaaaaaaaaaaaaaa',x) );
   }
 
   ngOnDestroy() {

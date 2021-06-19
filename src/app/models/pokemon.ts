@@ -11,6 +11,11 @@ export interface Pokemon {
   id?: string;
 }
 
+export interface PaginatedPokemonPage{
+  count: number;
+  results: SimplifiedPokemon[];
+}
+
 export interface SimplifiedPokemon {
   name: string;
   ability: string;

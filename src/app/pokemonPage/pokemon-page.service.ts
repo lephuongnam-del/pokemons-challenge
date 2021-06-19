@@ -1,9 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { Store } from '../abtract/store';
 import { PaginatorState } from '../components/paginator/paginator.component';
-import { SimplifiedPokemon, Stat } from '../models/pokemon';
+import {
+  PaginatedPokemonPage,
+  SimplifiedPokemon,
+  Stat
+} from '../models/pokemon';
 import { BackendService } from '../services/backend.service';
 
 export class pokemonState {
@@ -13,7 +17,14 @@ export class pokemonState {
   image: string = ' ';
   stats: Stat[] = [];
   type: string = ' ';
-
+  simplifiedPokemon: SimplifiedPokemon = {
+    name: '',
+    ability: '',
+    hiddenAbility: '',
+    image: '',
+    stats: [],
+    type: ''
+  };
   paginatorState: PaginatorState = {
     page: 1,
     pageCount: 5,
@@ -28,7 +39,6 @@ export class PokemonPageService extends Store<pokemonState>
   private readonly onDestroy$: Subject<void> = new Subject<void>();
   constructor(private backendService: BackendService) {
     super(new pokemonState());
-   // console.log(this.getpokemons());
   }
 
   ngOnDestroy() {
@@ -36,15 +46,5 @@ export class PokemonPageService extends Store<pokemonState>
     this.onDestroy$.complete();
   }
 
-  // getpokemons() {
-  //   this.backendService
-  //     .getPokemons(
-  //       this.getState.paginatorState.rows,
-  //       this.getState.paginatorState.first - this.getState.paginatorState.rows
-  //     )
-  //     .pipe(takeUntil(this.onDestroy$))
-  //     .subscribe((p:SimplifiedPokemon) => {
-
-  //     })
-  // }
+ 
 }
